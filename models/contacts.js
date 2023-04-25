@@ -39,8 +39,9 @@ async function removeContact(contactId) {
 const updateContact = async (contactId, body) => {
   const contacts = await listContacts();
   const idx = contacts.findIndex((contact) => contact.id === contactId);
-  contacts[idx] = { ...body, contactId };
-  await fs.writeFile(contactsPath, JSON.stringify(body), "utf-8");
+  contacts[idx] = { contactId, ...body };
+  contacts.push(contacts[idx]);
+  await fs.writeFile(contactsPath, JSON.stringify(contacts), "utf-8");
   return contacts[idx] || null;
 };
 

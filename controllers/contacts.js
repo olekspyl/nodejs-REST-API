@@ -1,5 +1,6 @@
 const { Contact } = require("../models/contact");
 const { HttpError, ctrlWrapper } = require("../utils");
+const { User } = require("../models/user");
 
 const listContacts = async (req, res) => {
   const { _id: owner } = req.user;
@@ -13,11 +14,11 @@ const listContacts = async (req, res) => {
 };
 
 const getContactById = async (req, res) => {
-  const { _id: owner } = req.user;
-  if (req.user._id !== { owner }) {
+  const { contactId } = req.params;
+  const existIdinUser = await User.exists({ contactId });
+  if (!existIdinUser) {
     throw HttpError(404, "Not found");
   }
-  const { contactId } = req.params;
   const result = await Contact.findById(contactId);
   res.json({ result });
 };
@@ -29,11 +30,15 @@ const addContact = async (req, res) => {
 };
 
 const deleteContact = async (req, res) => {
-  const { _id: owner } = req.user;
-  if (req.user._id !== { owner }) {
+  // const { _id: owner } = req.user;
+  // if (req.user._id !== { owner }) {
+  //   throw HttpError(404, "Not found");
+  // }
+  const { contactId } = req.params;
+  const existIdinUser = await User.exists({ contactId });
+  if (!existIdinUser) {
     throw HttpError(404, "Not found");
   }
-  const { contactId } = req.params;
   const result = await Contact.findByIdAndDelete(contactId);
   if (!result) {
     throw HttpError(404, "Not found");
@@ -44,11 +49,15 @@ const deleteContact = async (req, res) => {
 };
 
 const updateContact = async (req, res) => {
-  const { _id: owner } = req.user;
-  if (req.user._id !== { owner }) {
+  // const { _id: owner } = req.user;
+  // if (req.user._id !== { owner }) {
+  //   throw HttpError(404, "Not found");
+  // }
+  const { contactId } = req.params;
+  const existIdinUser = await User.exists({ contactId });
+  if (!existIdinUser) {
     throw HttpError(404, "Not found");
   }
-  const { contactId } = req.params;
   const result = await Contact.findByIdAndUpdate(contactId, req.body, {
     new: true,
   });
@@ -59,11 +68,15 @@ const updateContact = async (req, res) => {
 };
 
 const updateFavorite = async (req, res) => {
-  const { _id: owner } = req.user;
-  if (req.user._id !== { owner }) {
+  // const { _id: owner } = req.user;
+  // if (req.user._id !== { owner }) {
+  //   throw HttpError(404, "Not found");
+  // }
+  const { contactId } = req.params;
+  const existIdinUser = await User.exists({ contactId });
+  if (!existIdinUser) {
     throw HttpError(404, "Not found");
   }
-  const { contactId } = req.params;
   const result = await Contact.findByIdAndUpdate(contactId, req.body, {
     new: true,
   });
